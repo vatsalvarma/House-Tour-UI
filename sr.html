@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Scroll Frames</title>
+
+    <style>
+        body {
+          margin: 0;
+          height: 1000vh;
+          background: black;
+        }
+
+        canvas {
+          position: sticky;
+          top: 0;
+          width: 100%;
+          height: 100vh;
+        }
+
+        /* canvas */
+canvas {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+/* 🔥 RIGHT SIDE BUTTON CONTAINER */
+/* 🔥 PANEL CONTAINER */
+.controls {
+  position: fixed;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  padding: 18px;
+  width: 180px;
+
+  border-radius: 20px;
+
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.08);
+
+  border: 1px solid rgba(255,255,255,0.2);
+
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  z-index: 20;
+}
+
+/* 🔥 TITLE */
+.panel-title {
+  color: white;
+  font-size: 14px;
+  opacity: 0.7;
+  margin-bottom: 5px;
+}
+
+/* 🔥 GLASS BUTTON */
+.glass-btn {
+  padding: 10px 14px;
+  border-radius: 12px;
+
+  color: white;
+  font-size: 14px;
+  text-align: center;
+
+  cursor: pointer;
+
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.15);
+
+  border: 1px solid rgba(255,255,255,0.25);
+
+  transition: all 0.3s ease;
+}
+
+/* 🔥 HOVER (like your image) */
+.glass-btn:hover {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(4px);
+  transform: scale(1.05);
+}
+
+/* 🔥 ACTIVE CLICK */
+.glass-btn:active {
+  transform: scale(0.95);
+}
+
+/* 🔥 OPTIONAL: ACTIVE STATE (highlight selected section) */
+.glass-btn.active {
+  background: rgba(255,255,255,0.3);
+}
+
+/* 🔥 LEFT SIDE PANEL */
+.left-ui {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 20;
+}
+
+/* 🔥 GLASS CARD */
+.card {
+  width: 180px;
+  padding: 15px;
+  border-radius: 18px;
+
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.08);
+
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+
+  color: white;
+}
+
+/* TEXT STYLES */
+.card-title {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.big {
+  font-size: 26px;
+  margin-top: 5px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+
+/* 🔥 BOTTOM BAR */
+.bottom-bar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  gap: 20px;
+
+  padding: 12px 25px;
+  border-radius: 20px;
+
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.08);
+
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+
+  z-index: 20;
+}
+
+/* NAV ITEMS */
+.nav-item {
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: 0.3s;
+}
+
+.nav-item:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+    </style>
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+
+<!-- 🔥 6 BUTTONS -->
+<div class="controls">
+
+    <div class="panel-title">Rooms</div>
+
+    <div class="glass-btn" onclick="goToFrame(0)">Bedroom</div>
+    <div class="glass-btn" onclick="goToFrame(248)">Living Room</div>
+    <div class="glass-btn" onclick="goToFrame(380)">Kitchen</div>
+    <div class="glass-btn" onclick="goToFrame(469)">Dining</div>
+    <div class="glass-btn" onclick="goToFrame(558)">Bathroom</div>
+    <div class="glass-btn" onclick="goToFrame(664)">Balcony</div>
+
+</div>
+
+<!-- 🔥 LEFT DASHBOARD -->
+<div class="left-ui">
+
+    <div class="card">
+        <div class="card-title">Available Slots</div>
+        <div class="big">6/12</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Rating</div>
+        <div class="big">4.5★</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">New Customers</div>
+        <div class="row">
+            <span>+32%</span>
+            <span>+56%</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- 🔥 RIGHT SIDE (already yours stays same) -->
+
+<!-- 🔥 BOTTOM NAV BAR -->
+<div class="bottom-bar">
+    <div class="nav-item">Dashboard</div>
+    <div class="nav-item">Rooms</div>
+    <div class="nav-item">Products</div>
+    <div class="nav-item">Settings</div>
+    <div class="nav-item">Profile</div>
+</div>
+
+<script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const frameCount = 840;
+    const images = [];
+    let currentFrame = 0;
+
+    /* 🔥 PRELOAD */
+    for (let i = 1; i <= frameCount; i++) {
+      const img = new Image();
+      img.src = `frame_${String(i).padStart(4, '0')}.jpg`;
+      images.push(img);
+    }
+
+    /* DRAW */
+    function draw(index) {
+      const img = images[index];
+      if (img.complete) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    /* SCROLL → FRAME */
+    function update() {
+      const scrollTop = window.scrollY;
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      const progress = scrollTop / maxScroll;
+
+      const frameIndex = Math.min(
+        frameCount - 1,
+        Math.floor(progress * frameCount)
+      );
+
+      if (frameIndex !== currentFrame) {
+        currentFrame = frameIndex;
+        draw(currentFrame);
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    /* 🔥 SMOOTH SCROLL */
+    function smoothScrollTo(targetY, duration = 1200) {
+      const startY = window.scrollY;
+      const diff = targetY - startY;
+      let startTime = null;
+
+      function ease(t) {
+        return t < 0.5
+          ? 2 * t * t
+          : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      }
+
+      function step(time) {
+        if (!startTime) startTime = time;
+
+        const progress = Math.min((time - startTime) / duration, 1);
+        const eased = ease(progress);
+
+        window.scrollTo(0, startY + diff * eased);
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    /* 🔥 BUTTON CLICK */
+    function goToFrame(frameNumber) {
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+
+      const targetY = (frameNumber / (frameCount - 1)) * maxScroll;
+
+      console.log("Going to frame:", frameNumber, "ScrollY:", targetY);
+
+      smoothScrollTo(targetY, 1500);
+    }
+
+    /* FIRST FRAME */
+    images[0].onload = () => draw(0);
+
+    update();
+</script>
+
+</body>
+</html>
